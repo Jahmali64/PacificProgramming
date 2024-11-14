@@ -1,0 +1,6 @@
+@PacificProgramming.API_HostAddress = http://localhost:5244
+
+GET {{PacificProgramming.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
