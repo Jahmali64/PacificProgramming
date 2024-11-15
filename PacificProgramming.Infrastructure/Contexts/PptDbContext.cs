@@ -9,4 +9,6 @@ public class PptDbContext : DbContext, IPptDbContext {
     public virtual DbSet<Image> Images { get; set; }
 
     public PptDbContext(DbContextOptions<PptDbContext> options) : base(options) { }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => base.OnConfiguring(optionsBuilder);
 }
