@@ -13,6 +13,11 @@ public class Program {
         builder.Services.AddApplicationServices();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AllowedOrigins"));
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped(typeof(CancellationToken), serviceProvider => {
+            IHttpContextAccessor httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            return httpContext.HttpContext?.RequestAborted ?? CancellationToken.None;
+        });
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
