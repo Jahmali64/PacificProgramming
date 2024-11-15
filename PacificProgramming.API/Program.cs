@@ -1,5 +1,7 @@
 using PacificProgramming.Infrastructure;
 using PacificProgramming.Application;
+using PacificProgramming.API.Models;
+using Microsoft.Extensions.Options;
 
 namespace PacificProgramming.API;
 
@@ -10,6 +12,7 @@ public class Program {
         // Add services to the container.
         builder.Services.AddApplicationServices();
         builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AllowedOrigins"));
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,6 +25,8 @@ public class Program {
         if (app.Environment.IsDevelopment()) {
             app.UseSwagger();
             app.UseSwaggerUI();
+            var frontendTestUrl = app.Services.GetRequiredService<IOptions<AppSettings>>().Value.FrontendTestUrl;
+            app.UseCors(builder => builder.WithOrigins(frontendTestUrl));
         }
 
         app.UseHttpsRedirection();
