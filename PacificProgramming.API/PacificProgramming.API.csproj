@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PacificProgramming.Application\PacificProgramming.Application.csproj" />
-    <ProjectReference Include="..\PacificProgramming.Infrastructure\PacificProgramming.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
