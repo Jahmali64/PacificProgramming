@@ -25,8 +25,8 @@ public sealed class AvatarImageServiceUnitTests {
     }
 
     [Theory]
-    [InlineData("", "https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150")]
-    public async Task GetAvatarImage_WithEmptyIdentifier_ReturnsImageWithDefaultUrl(string userIdentifier, string expectedUrl) {
+    [InlineData("", 0, "https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150")]
+    public async Task GetAvatarImage_WithEmptyIdentifier_ReturnsImageWithDefaultUrl(string userIdentifier, int expectedId, string expectedUrl) {
         // Arrange
         _avatarImageStrategyFactoryMock.Setup(s => s.GetStrategy(userIdentifier)).Returns(new DefaultAvatarImageStrategy());
 
@@ -34,7 +34,7 @@ public sealed class AvatarImageServiceUnitTests {
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
         // Assert
-        Assert.Equal(result.Id, 0);
+        Assert.Equal(result.Id, expectedId);
         Assert.Equal(result.Url, expectedUrl);
     }
 
@@ -57,8 +57,8 @@ public sealed class AvatarImageServiceUnitTests {
     }
 
     [Theory]
-    [InlineData("myth7", "https://api.dicebear.com/8.x/pixel-art/png?seed=7&size=150")]
-    public async Task GetAvatarImage_WithLastDigitBetweenSixAndNineInIdentifier_ReturnsImageWithUrlFromJson(string userIdentifier, string expectedUrl) {
+    [InlineData("myth7", 7, "https://api.dicebear.com/8.x/pixel-art/png?seed=7&size=150")]
+    public async Task GetAvatarImage_WithLastDigitBetweenSixAndNineInIdentifier_ReturnsImageWithUrlFromJson(string userIdentifier, int expectedId, string expectedUrl) {
         // Arrange
         _avatarImageStrategyFactoryMock.Setup(s => s.GetStrategy(userIdentifier)).Returns(new JsonAvatarImageStrategy(It.IsAny<CancellationToken>()));
 
@@ -66,13 +66,13 @@ public sealed class AvatarImageServiceUnitTests {
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
         // Assert
-        Assert.Equal(result.Id, 7);
+        Assert.Equal(result.Id, expectedId);
         Assert.Equal(result.Url, expectedUrl);
     }
 
     [Theory]
-    [InlineData("mythos", "https://api.dicebear.com/8.x/pixel-art/png?seed=vowel&size=150")]
-    public async Task GetAvatarImage_WithVowelInIdentifier_ReturnsImageWithVowelUrl(string userIdentifier, string expectedUrl) {
+    [InlineData("mythos", 0, "https://api.dicebear.com/8.x/pixel-art/png?seed=vowel&size=150")]
+    public async Task GetAvatarImage_WithVowelInIdentifier_ReturnsImageWithVowelUrl(string userIdentifier, int expectedId, string expectedUrl) {
         // Arrange
         _avatarImageStrategyFactoryMock.Setup(s => s.GetStrategy(userIdentifier)).Returns(new VowelAvatarImageStrategy());
 
@@ -80,13 +80,13 @@ public sealed class AvatarImageServiceUnitTests {
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
         // Assert
-        Assert.Equal(result.Id, 0);
+        Assert.Equal(result.Id, expectedId);
         Assert.Equal(result.Url, expectedUrl);
     }
 
     [Theory]
-    [InlineData("myth+", "https://api.dicebear.com/8.x/pixel-art")]
-    public async Task GetAvatarImage_WithSpecialCharacterInIdentifier_ReturnsImageWithRandomUrl(string userIdentifier, string expectedUrl) {
+    [InlineData("myth+", 1, 5, "https://api.dicebear.com/8.x/pixel-art")]
+    public async Task GetAvatarImage_WithSpecialCharacterInIdentifier_ReturnsImageWithRandomUrl(string userIdentifier, int expectedMinId, int expectedMaxId, string expectedUrl) {
         // Arrange
         _avatarImageStrategyFactoryMock.Setup(s => s.GetStrategy(userIdentifier)).Returns(new RandomAvatarImageStrategy());
 
@@ -94,13 +94,13 @@ public sealed class AvatarImageServiceUnitTests {
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
         // Assert
-        Assert.InRange<int>(result.Id, 1, 5);
+        Assert.InRange<int>(result.Id, expectedMinId, expectedMaxId);
         Assert.StartsWith(expectedUrl, result.Url);
     }
 
     [Theory]
-    [InlineData("myth", "https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150")]
-    public async Task GetAvatarImage_WithNoMetConditionsIdentifier_ReturnsImageWithDefaultUrl(string userIdentifier, string expectedUrl) {
+    [InlineData("myth", 0, "https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150")]
+    public async Task GetAvatarImage_WithNoMetConditionsIdentifier_ReturnsImageWithDefaultUrl(string userIdentifier, int expectedId, string expectedUrl) {
         // Arrange
         _avatarImageStrategyFactoryMock.Setup(s => s.GetStrategy(userIdentifier)).Returns(new DefaultAvatarImageStrategy());
 
@@ -108,7 +108,7 @@ public sealed class AvatarImageServiceUnitTests {
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
         // Assert
-        Assert.Equal(result.Id, 0);
+        Assert.Equal(result.Id, expectedId);
         Assert.Equal(result.Url, expectedUrl);
     }
 }
