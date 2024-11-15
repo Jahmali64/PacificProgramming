@@ -25,8 +25,10 @@ public sealed class AvatarImageServiceIntegrationTests {
     [Theory]
     [InlineData("", "https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150")]
     public async Task GetAvatarImage_WithEmptyIdentifier_ReturnsImageWithDefaultUrl(string userIdentifier, string expectedUrl) {
+        // Act
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
+        // Assert
         Assert.Equal(result.Id, 0);
         Assert.Equal(result.Url, expectedUrl);
     }
@@ -34,8 +36,10 @@ public sealed class AvatarImageServiceIntegrationTests {
     [Theory]
     [InlineData("myth1", "https://api.dicebear.com/8.x/pixel-art/png?seed=db1&size=150")]
     public async Task GetAvatarImage_WithLastDigitBetweenOneAndFiveInIdentifier_ReturnsImageWithUrlFromDatabase(string userIdentifier, string expectedUrl) {
+        // Act
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
+        // Assert
         Assert.Equal(result.Id, 1);
         Assert.Equal(result.Url, expectedUrl);
     }
@@ -43,8 +47,10 @@ public sealed class AvatarImageServiceIntegrationTests {
     [Theory]
     [InlineData("myth7", "https://api.dicebear.com/8.x/pixel-art/png?seed=7&size=150")]
     public async Task GetAvatarImage_WithLastDigitBetweenSixAndNineInIdentifier_ReturnsImageWithUrlFromJson(string userIdentifier, string expectedUrl) {
+        // Act
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
+        // Assert
         Assert.Equal(result.Id, 7);
         Assert.Equal(result.Url, expectedUrl);
     }
@@ -52,8 +58,10 @@ public sealed class AvatarImageServiceIntegrationTests {
     [Theory]
     [InlineData("mythos", "https://api.dicebear.com/8.x/pixel-art/png?seed=vowel&size=150")]
     public async Task GetAvatarImage_WithVowelInIdentifier_ReturnsImageWithVowelUrl(string userIdentifier, string expectedUrl) {
+        // Act
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
+        // Assert
         Assert.Equal(result.Id, 0);
         Assert.Equal(result.Url, expectedUrl);
     }
@@ -61,8 +69,10 @@ public sealed class AvatarImageServiceIntegrationTests {
     [Theory]
     [InlineData("myth+", "https://api.dicebear.com/8.x/pixel-art")]
     public async Task GetAvatarImage_WithSpecialCharacterInIdentifier_ReturnsImageWithRandomUrl(string userIdentifier, string expectedUrl) {
+        // Act
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
+        // Assert
         Assert.InRange<int>(result.Id, 1, 5);
         Assert.StartsWith(expectedUrl, result.Url);
     }
@@ -70,8 +80,10 @@ public sealed class AvatarImageServiceIntegrationTests {
     [Theory]
     [InlineData("myth", "https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150")]
     public async Task GetAvatarImage_WithNoMetConditionsIdentifier_ReturnsImageWithDefaultUrl(string userIdentifier, string expectedUrl) {
+        // Act
         var result = await _avatarImageService.GetAvatarImage(userIdentifier);
 
+        // Assert
         Assert.Equal(result.Id, 0);
         Assert.Equal(result.Url, expectedUrl);
     }
