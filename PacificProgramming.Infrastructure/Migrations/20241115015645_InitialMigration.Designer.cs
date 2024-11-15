@@ -10,8 +10,8 @@ using PacificProgramming.Infrastructure.Contexts;
 namespace PacificProgramming.Infrastructure.Migrations
 {
     [DbContext(typeof(PptDbContext))]
-    [Migration("20241115005425_initial-migration")]
-    partial class initialmigration
+    [Migration("20241115015645_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
